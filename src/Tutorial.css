@@ -1,0 +1,155 @@
+/* ═══════════════════════════════════════════════════════════════
+   TUTORIAL OVERLAY
+═══════════════════════════════════════════════════════════════ */
+
+/* Full-screen container sits above everything */
+.tut-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none; /* children opt back in */
+}
+
+/* Semi-transparent shade pieces */
+.tut-shade {
+  position: fixed;
+  background: rgba(4, 4, 14, 0.78);
+  pointer-events: all;
+  transition: all 0.25s ease;
+}
+
+.tut-full-shade {
+  inset: 0;
+}
+
+/* Glowing border around the highlighted element */
+.tut-highlight {
+  position: fixed;
+  border-radius: 14px;
+  border: 2px solid var(--accent-primary);
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.18),
+    0 0 24px rgba(99, 102, 241, 0.35);
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: tut-pulse 2s ease infinite;
+}
+
+@keyframes tut-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(99,102,241,.18), 0 0 24px rgba(99,102,241,.35); }
+  50%       { box-shadow: 0 0 0 6px rgba(99,102,241,.10), 0 0 36px rgba(99,102,241,.5); }
+}
+
+/* ── Tooltip card ──────────────────────────────────────────────── */
+.tut-tooltip {
+  position: fixed;
+  z-index: 9100;
+  width: 320px;
+  background: rgba(18, 18, 32, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 16px;
+  padding: 22px 22px 18px;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(255,255,255,0.05);
+  pointer-events: all;
+  /* keep card inside viewport */
+  max-width: calc(100vw - 40px);
+}
+
+/* Centered card (welcome / done steps) */
+.tut-tooltip.tut-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 380px;
+  text-align: center;
+}
+
+/* Step dot progress */
+.tut-step-counter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.tut-tooltip.tut-center .tut-step-counter {
+  justify-content: center;
+}
+
+.tut-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: all 0.2s;
+}
+
+.tut-dot.active {
+  background: var(--accent-primary);
+  width: 18px;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(99,102,241,.6);
+}
+
+.tut-dot.done {
+  background: rgba(99,102,241,0.45);
+}
+
+/* Title */
+.tut-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #f0f0ff;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+/* Body text */
+.tut-body {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+/* Actions row */
+.tut-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tut-tooltip.tut-center .tut-actions {
+  justify-content: center;
+}
+
+.tut-skip {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color .15s;
+}
+
+.tut-skip:hover {
+  color: var(--text-secondary);
+}
+
+.tut-next {
+  margin-left: auto;
+  padding: 9px 18px;
+  font-size: 13px;
+}
+
+.tut-tooltip.tut-center .tut-next {
+  margin-left: 0;
+}

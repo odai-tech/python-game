@@ -1,0 +1,162 @@
+/* ═══════════════════════════════════════════════════════════════
+   PYQUEST — DESIGN SYSTEM
+   Apple-inspired 2024 · Pure black · Ultra-thin glass
+═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Backgrounds ─────────────────────────────────────────────── */
+  --bg-primary:   #000000;
+  --bg-panel:     rgba(255,255,255,0.04);
+
+  /* ── Text ────────────────────────────────────────────────────── */
+  --text-primary:   rgba(255,255,255,0.92);
+  --text-secondary: rgba(255,255,255,0.55);
+  --text-muted:     rgba(255,255,255,0.28);
+
+  /* ── Accents ─────────────────────────────────────────────────── */
+  --accent-primary:   #ffffff;
+  --accent-off-white: #f5f5f7;
+  --accent-success:   #30d158;
+  --accent-error:     #ff453a;
+  --accent-warn:      #ffd60a;
+
+  /* ── Borders ─────────────────────────────────────────────────── */
+  --border:      rgba(255,255,255,0.08);
+  --border-faint: rgba(255,255,255,0.05);
+
+  /* ── Typography ──────────────────────────────────────────────── */
+  --font-main: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+
+  /* ── Radii ───────────────────────────────────────────────────── */
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-pill: 100px;
+  --radius-card: 18px;
+
+  /* ── Shadows (no color — only black) ────────────────────────── */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.35);
+  --shadow-md:  0 8px 32px rgba(0,0,0,0.45);
+  --shadow-lg:  0 24px 64px rgba(0,0,0,0.55);
+  --shadow-inset-hi: 0 1px 0 rgba(255,255,255,0.06) inset;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-main);
+  font-weight: 300;
+  background: #05050f;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.10);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+
+/* ── Glass panel ─────────────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(48px) saturate(160%);
+  -webkit-backdrop-filter: blur(48px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 0 0 transparent, var(--shadow-inset-hi);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 13px;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+  border: none;
+  outline: none;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: #ffffff;
+  color: #000000;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  box-shadow: var(--shadow-inset-hi);
+}
+.btn-primary:hover:not(:disabled) {
+  background: rgba(255,255,255,0.88);
+  transform: scale(0.98);
+}
+.btn-primary:active:not(:disabled) { transform: scale(0.96); }
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.70);
+  border-radius: var(--radius-pill);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255,255,255,0.07);
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.22);
+}
+.btn-ghost:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+/* ── Keyboard badge ──────────────────────────────────────────────── */
+kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+/* ── Inline code ─────────────────────────────────────────────────── */
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.85);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.10);
+}

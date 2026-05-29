@@ -1,0 +1,966 @@
+/* ═══════════════════════════════════════════════════════════════
+   PYQUEST — DASHBOARD STYLING
+   Glassmorphic dark UI, gaming progression cards, HSL glow colors
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --glow-gold: 0 0 20px rgba(255, 214, 10, 0.22), 0 0 40px rgba(255, 214, 10, 0.10);
+  --glow-orange: 0 0 20px rgba(249, 115, 22, 0.25), 0 0 40px rgba(249, 115, 22, 0.12);
+  --glow-emerald: 0 0 20px rgba(48, 209, 88, 0.22), 0 0 40px rgba(48, 209, 88, 0.10);
+}
+
+.dashboard-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 10px 14px 40px;
+  position: relative;
+  height: 100%;
+}
+
+/* Custom Scrollbar for Dashboard content */
+.dashboard-container::-webkit-scrollbar {
+  width: 6px;
+}
+.dashboard-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dashboard-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+.dashboard-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ── Top Glass Navigation Bar ──────────────────────────────────── */
+.dash-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.dash-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dash-logo-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  color: #ffffff;
+  box-shadow: var(--shadow-inset-hi);
+  animation: pulse-logo 3s ease-in-out infinite;
+}
+
+@keyframes pulse-logo {
+  0%, 100% { box-shadow: var(--shadow-inset-hi); }
+  50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.12), var(--shadow-inset-hi); }
+}
+
+.dash-logo-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.dash-logo-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+.dash-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.xp-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  box-shadow: var(--shadow-inset-hi);
+}
+
+.xp-indicator svg {
+  color: var(--accent-warn);
+}
+
+/* Beginner Course Button */
+.btn-beginner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #10b981;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-beginner:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.15));
+  border-color: rgba(16, 185, 129, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.btn-beginner svg {
+  color: #10b981;
+}
+
+/* ── Top Level Progression Grid (Addicting Cards) ─────────────── */
+.progression-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .progression-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .progression-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.prog-card {
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.prog-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.prog-card-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+
+.prog-card:hover .prog-card-glow {
+  opacity: 0.28;
+}
+
+.prog-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.prog-card-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.prog-card-icon {
+  color: var(--text-muted);
+}
+
+/* Rank Card Custom Specs */
+.rank-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rank-badge-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.rank-badge-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.rank-next-tier {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd60a, #ff9f0a);
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Streak Card Custom Specs */
+.streak-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.streak-count {
+  font-size: 38px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.streak-unit {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.streak-calendar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
+  gap: 4px;
+}
+
+.day-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.day-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.day-bubble {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  transition: all 0.25s ease;
+}
+
+.day-bubble.active {
+  background: #ff9f0a;
+  border-color: #ffd60a;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(255, 159, 10, 0.4);
+}
+
+.day-bubble.today {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Daily reward claim button */
+.claim-reward-btn {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #ffd60a, #ff9f0a);
+  color: #000000;
+  font-weight: 700;
+  width: 100%;
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  font-size: 11px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2);
+  transition: transform 0.18s, box-shadow 0.18s;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  animation: pulse-gold-btn 2s infinite;
+}
+
+@keyframes pulse-gold-btn {
+  0%, 100% { box-shadow: 0 4px 12px rgba(255, 214, 10, 0.2); }
+  50% { box-shadow: 0 4px 20px rgba(255, 214, 10, 0.45); }
+}
+
+.claim-reward-btn:hover {
+  transform: scale(0.98);
+}
+
+.claim-reward-btn:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  animation: none;
+  box-shadow: none;
+}
+
+/* Daily Quests Card Custom Specs */
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.quest-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.quest-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  color: transparent;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.quest-item.completed .quest-check {
+  background: var(--accent-success);
+  border-color: var(--accent-success);
+  color: #000000;
+  box-shadow: 0 0 10px rgba(48, 209, 88, 0.3);
+}
+
+.quest-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.quest-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.quest-desc {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.quest-progress-bar-wrap {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  margin: 6px 0 4px 0;
+  overflow: hidden;
+}
+
+.quest-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #30d158, #10b981);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.quest-item.completed .quest-progress-bar {
+  background: linear-gradient(90deg, #30d158, #34d399);
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.4);
+}
+
+.quest-progress-text {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.quest-item.completed .quest-progress-text {
+  color: #30d158;
+}
+
+.quest-xp-reward {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #ffd60a;
+  background: rgba(255, 214, 10, 0.08);
+  border: 1px solid rgba(255, 214, 10, 0.15);
+  padding: 1px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Global Leaderboard Card Custom Specs */
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.leader-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  transition: background 0.15s ease;
+}
+
+.leader-row.user-row {
+  background: rgba(255, 214, 10, 0.06);
+  border: 1px solid rgba(255, 214, 10, 0.18);
+  box-shadow: var(--shadow-inset-hi);
+}
+
+.leader-rank-num {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  width: 14px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.leader-row.user-row .leader-rank-num {
+  color: #ffd60a;
+}
+
+.leader-name {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leader-row.user-row .leader-name {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.leader-xp {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.leader-row.user-row .leader-xp {
+  color: #ffd60a;
+}
+
+/* ── Section Title ──────────────────────────────────────────────── */
+.dash-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-section-title::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+/* ── Chapters Roadmap Grid (Spacious Roadmap Map) ──────────────── */
+/* ── Beginner Course Card ─────────────────────────────────────────────────── */
+.beginner-course-card {
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(59, 130, 246, 0.08));
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.beginner-course-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+}
+
+.beginner-course-glow {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.3), transparent);
+  pointer-events: none;
+}
+
+.beginner-course-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.beginner-course-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 14px;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.beginner-course-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.beginner-course-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.beginner-course-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.beginner-course-info h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.beginner-course-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.beginner-course-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.beginner-course-progress,
+.beginner-course-xp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.beginner-course-progress svg {
+  color: #10b981;
+}
+
+.beginner-course-xp svg {
+  color: #ffd60a;
+}
+
+.beginner-course-bar-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.beginner-course-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.beginner-course-action {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #10b981;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.beginner-course-card:hover .beginner-course-action {
+  background: #10b981;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.chapter-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.22);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Chapter Hover Effect (Glow corresponding to chapter color) */
+.chapter-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--ch-color-rgb), 0.24);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(var(--ch-color-rgb), 0.08);
+}
+
+.chapter-card-glow {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0.08;
+  background: rgb(var(--ch-color-rgb));
+  transition: opacity 0.3s ease;
+}
+
+.chapter-card:hover .chapter-card-glow {
+  opacity: 0.18;
+}
+
+.chapter-card-header {
+  padding: 22px 24px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.chapter-emoji-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(var(--ch-color-rgb), 0.08);
+  border: 1px solid rgba(var(--ch-color-rgb), 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-inset-hi);
+  transition: transform 0.2s ease;
+}
+
+.chapter-card:hover .chapter-emoji-circle {
+  transform: scale(1.05) rotate(4deg);
+}
+
+.chapter-header-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter-card-num {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: rgb(var(--ch-color-rgb));
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.chapter-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.chapter-progress-fraction {
+  font-size: 11.5px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-top: 6px;
+  display: block;
+}
+
+.chapter-progress-bar-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  width: 100%;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.chapter-progress-bar-fill {
+  height: 100%;
+  background: rgb(var(--ch-color-rgb));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chapter-chevron {
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.chapter-chevron.expanded {
+  transform: rotate(180deg);
+  color: #ffffff;
+}
+
+/* ── Level Drawer Inside Chapter ───────────────────────────────── */
+.levels-drawer {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.15);
+  padding: 12px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dash-level-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  gap: 12px;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.dash-level-row:hover:not(.locked) {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dash-level-row.locked {
+  opacity: 0.38;
+}
+
+.dash-level-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.dash-level-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-level-status.done { color: var(--accent-success); }
+.dash-level-status.todo { color: var(--text-muted); }
+.dash-level-status.locked { color: var(--text-muted); }
+
+.dash-level-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dash-level-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-level-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.dash-level-difficulty {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.dash-level-xp {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dash-play-btn {
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #ffffff;
+  color: #000000;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: var(--shadow-inset-hi);
+  flex-shrink: 0;
+}
+
+.dash-play-btn:hover {
+  background: rgba(255, 255, 255, 0.88);
+  transform: scale(0.97);
+}
+
+.dash-play-btn.review {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.dash-play-btn.review:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ── Arena Header Top Navigation Button ────────────────────────── */
+.map-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.map-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateX(-1px);
+}
