@@ -7,8 +7,8 @@ import {
 import ReactMarkdown from 'react-markdown';
 import './AIAssistant.css';
 
-const API_CHAT    = 'http://localhost:3001/api/chat';
-const API_ANALYZE = 'http://localhost:3001/api/analyze-error';
+const API_CHAT    = '/api/chat';
+const API_ANALYZE = '/api/analyze-error';
 
 // ── Quick-action chips ────────────────────────────────────────────────────────
 const QUICK_ACTIONS = [
