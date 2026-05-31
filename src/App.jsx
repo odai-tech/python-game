@@ -21,6 +21,9 @@ const ReferencePage = lazy(() => import('./ReferencePage'));
 // Lazy-load the Beginner page
 const BeginnerPage = lazy(() => import('./BeginnerPage'));
 import './BeginnerPage.css';
+// Lazy-load the Math page
+const MathPage = lazy(() => import('./MathPage'));
+import './MathPage.css';
 import Dashboard from './components/Dashboard';
 import './App.css';
 
@@ -73,6 +76,7 @@ export default function App() {
   const [attemptCount, setAttemptCount]     = useState(0);
   const [showReference, setShowReference]   = useState(false);
   const [showBeginner, setShowBeginner]     = useState(false);
+  const [showMath, setShowMath]             = useState(false);
   const [currentView, setCurrentView]       = useState(() => {
     try {
       return localStorage.getItem('pyquest_current_view') || 'dashboard';
@@ -335,6 +339,7 @@ sys.stderr = sys.stdout
             }}
             onViewReference={() => setShowReference(true)}
             onViewBeginner={() => setShowBeginner(true)}
+            onViewMath={() => setShowMath(true)}
             onEarnBonusXP={handleEarnBonusXP}
           />
         ) : (
@@ -725,6 +730,29 @@ sys.stderr = sys.stdout
             }>
               <BeginnerPage
                 onBack={() => setShowBeginner(false)}
+                onEarnXP={handleEarnBonusXP}
+              />
+            </Suspense>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Math page (full-screen overlay, lazy-loaded) ─────────────── */}
+      <AnimatePresence>
+        {showMath && (
+          <motion.div
+            className="beginner-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Suspense fallback={
+              <div className="ref-loading">
+                <span className="spinner-sm" /> Loading Math Practice…
+              </div>
+            }>
+              <MathPage
+                onBack={() => setShowMath(false)}
                 onEarnXP={handleEarnBonusXP}
               />
             </Suspense>

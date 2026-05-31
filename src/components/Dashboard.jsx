@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Trophy, Flame, Zap, Award, BookOpen, CheckCircle2, Lock,
-  Play, ChevronDown, Sparkles, Star, Library, Compass, GraduationCap
+  Play, ChevronDown, Sparkles, Star, Library, Compass, GraduationCap, Calculator
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Dashboard.css';
@@ -11,6 +11,7 @@ const STREAK_KEY = 'pyquest_streak_v2';
 const ACTIVITY_KEY = 'pyquest_activity';
 const DAILY_PROGRESS_KEY = 'pyquest_daily_progress';
 const BEGINNER_PROGRESS_KEY = 'pyquest_beginner_progress';
+const MATH_PROGRESS_KEY = 'pyquest_math_progress';
 
 function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -39,6 +40,7 @@ export default function Dashboard({
   onStartLevel,
   onViewReference,
   onViewBeginner,
+  onViewMath,
   onEarnBonusXP
 }) {
   const [expandedChapter, setExpandedChapter] = useState(null);
@@ -76,8 +78,38 @@ export default function Dashboard({
   const beginnerXP = Object.values(beginnerProgress).reduce((sum, l) => sum + (l.xp || 0), 0);
   const totalBeginnerLessons = 16; // Total lessons in beginner course
 
-  // Combined XP (main game + beginner)
-  const combinedXP = xp + beginnerXP;
+  // ── Load Math Progress ─────────────────────────────────────────────────────
+  const [mathProgress, setMathProgress] = useState(() => {
+    try {
+      const saved = localStorage.getItem(MATH_PROGRESS_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {};
+  });
+
+  useEffect(() => {
+    const loadMathProgress = () => {
+      try {
+        const saved = localStorage.getItem(MATH_PROGRESS_KEY);
+        if (saved) setMathProgress(JSON.parse(saved));
+      } catch {}
+    };
+    loadMathProgress();
+    window.addEventListener('storage', loadMathProgress);
+    window.addEventListener('focus', loadMathProgress);
+    return () => {
+      window.removeEventListener('storage', loadMathProgress);
+      window.removeEventListener('focus', loadMathProgress);
+    };
+  }, []);
+
+  // Calculate math stats
+  const mathQuestionsCompleted = Object.values(mathProgress).filter(q => q.completed).length;
+  const mathXP = Object.values(mathProgress).reduce((sum, q) => sum + (q.xp || 0), 0);
+  const totalMathQuestions = 60; // 3 exams × 20 questions
+
+  // Combined XP (main game + beginner + math)
+  const combinedXP = xp + beginnerXP + mathXP;
 
   // ── Activity Tracking (real dates when user completed levels) ──────────────
   const [activityDates, setActivityDates] = useState(() => {
@@ -511,6 +543,48 @@ export default function Dashboard({
               <div
                 className="beginner-course-bar-fill"
                 style={{ width: `${(beginnerLessonsCompleted / totalBeginnerLessons) * 100}%` }}
+              />
+            </div>
+          </div>
+          <div className="beginner-course-action">
+            <Play size={20} fill="currentColor" />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── Math Course Card ─────────────────────────────────────────── */}
+      <motion.div
+        className="beginner-course-card math-course-card glass-panel"
+        variants={cardVariants}
+        onClick={onViewMath}
+      >
+        <div className="beginner-course-glow math-course-glow" />
+        <div className="beginner-course-content">
+          <div className="beginner-course-icon math-course-icon">
+            <Calculator size={28} />
+          </div>
+          <div className="beginner-course-info">
+            <div className="beginner-course-header">
+              <span className="beginner-course-badge math-badge">TESTAS PREP</span>
+              <h3>Math Equations Practice</h3>
+            </div>
+            <p className="beginner-course-desc">
+              Practice {totalMathQuestions} TestAS-style equation systems. Easy, Medium, and Hard difficulty levels.
+            </p>
+            <div className="beginner-course-stats">
+              <span className="beginner-course-progress">
+                <CheckCircle2 size={14} />
+                {mathQuestionsCompleted} / {totalMathQuestions} questions
+              </span>
+              <span className="beginner-course-xp">
+                <Zap size={14} />
+                {mathXP} XP earned
+              </span>
+            </div>
+            <div className="beginner-course-bar-track">
+              <div
+                className="beginner-course-bar-fill math-bar-fill"
+                style={{ width: `${(mathQuestionsCompleted / totalMathQuestions) * 100}%` }}
               />
             </div>
           </div>
