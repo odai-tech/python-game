@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Calculator, ChevronLeft, ChevronRight, CheckCircle2,
   Trophy, Star, Zap, RotateCcw, Lightbulb, X, Home,
-  Lock, Sparkles, ArrowRight, AlertCircle
+  Lock, Sparkles, ArrowRight, AlertCircle, BookOpen,
+  Brain, Eye, Clock, ChevronDown, ChevronUp, HelpCircle,
+  Target, Flame, GraduationCap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { mathLevels, mathChapters } from './mathLevels';
+import { mathLevels, mathChapters, mentalMathStrategies } from './mathLevels';
 import './MathPage.css';
 
 const MATH_PROGRESS_KEY = 'pyquest_math_progress';
@@ -19,15 +21,236 @@ function saveMathProgress(p) {
   localStorage.setItem(MATH_PROGRESS_KEY, JSON.stringify(p));
 }
 
+// Strategy Guide Modal
+function StrategyGuide({ onClose }) {
+  const [activeStrategy, setActiveStrategy] = useState(0);
+  const strategy = mentalMathStrategies[activeStrategy];
+
+  return (
+    <motion.div
+      className="strategy-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="strategy-modal glass-panel"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.9, opacity: 0 }}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="strategy-header">
+          <div className="strategy-header-left">
+            <Brain size={24} />
+            <div>
+              <h2>Mental Math Mastery</h2>
+              <p>Learn to solve ANY equation in under 30 seconds</p>
+            </div>
+          </div>
+          <button className="strategy-close" onClick={onClose}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="strategy-content">
+          {/* Strategy Tabs */}
+          <div className="strategy-tabs">
+            {mentalMathStrategies.map((s, i) => (
+              <button
+                key={s.id}
+                className={`strategy-tab ${activeStrategy === i ? 'active' : ''}`}
+                onClick={() => setActiveStrategy(i)}
+              >
+                <span className="strategy-tab-emoji">{s.emoji}</span>
+                <span className="strategy-tab-title">{s.title}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Active Strategy Content */}
+          <div className="strategy-detail">
+            <div className="strategy-intro">
+              <span className="strategy-emoji-large">{strategy.emoji}</span>
+              <div>
+                <h3>{strategy.title}</h3>
+                <p className="strategy-short">{strategy.shortDesc}</p>
+              </div>
+            </div>
+
+            <div className="strategy-steps">
+              <h4><Target size={16} /> The Steps</h4>
+              <ol>
+                {strategy.steps.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
+              </ol>
+            </div>
+
+            {strategy.example && (
+              <div className="strategy-example">
+                <h4><BookOpen size={16} /> Example</h4>
+                <div className="example-equations">
+                  {strategy.example.equations.map((eq, i) => (
+                    <div key={i} className="example-eq">
+                      <span className="eq-num">{i + 1}.</span>
+                      <span className="eq-text">{eq}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="example-walkthrough">
+                  {strategy.example.walkthrough.map((step, i) => (
+                    <motion.div
+                      key={i}
+                      className="walkthrough-step"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      <span className="step-bullet">→</span>
+                      <span>{step}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="strategy-trick">
+              <Flame size={16} />
+              <div>
+                <strong>Pro Tip:</strong>
+                <p>{strategy.mentalTrick}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="strategy-footer">
+          <p>💡 Practice these strategies and you'll solve equations lightning fast!</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// Step-by-step solution component
+function SolutionWalkthrough({ solution, equations, onClose }) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [showAll, setShowAll] = useState(false);
+
+  if (!solution) return null;
+
+  const steps = solution.steps || [];
+
+  return (
+    <motion.div
+      className="solution-panel"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+    >
+      <div className="solution-header">
+        <div className="solution-header-left">
+          <GraduationCap size={20} />
+          <h4>Step-by-Step Solution</h4>
+        </div>
+        <div className="solution-header-right">
+          <span className="solution-time">
+            <Clock size={14} />
+            {solution.timeEstimate}
+          </span>
+          <button className="solution-close" onClick={onClose}>
+            <X size={16} />
+          </button>
+        </div>
+      </div>
+
+      <div className="solution-equations">
+        <span className="solution-label">The equations:</span>
+        <div className="solution-eq-list">
+          {equations.map((eq, i) => (
+            <span key={i} className="solution-eq">{eq}</span>
+          ))}
+        </div>
+      </div>
+
+      <div className="solution-steps">
+        {(showAll ? steps : steps.slice(0, currentStep + 1)).map((step, i) => (
+          <motion.div
+            key={i}
+            className={`solution-step ${i === currentStep && !showAll ? 'current' : ''}`}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: showAll ? 0 : 0.1 }}
+          >
+            <div className="step-number">{i + 1}</div>
+            <div className="step-content">
+              <h5>{step.title}</h5>
+              <p>{step.content}</p>
+              {step.equation && (
+                <div className="step-equation">
+                  <code>{step.equation}</code>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {!showAll && currentStep < steps.length - 1 && (
+        <button
+          className="solution-next-btn"
+          onClick={() => setCurrentStep(prev => Math.min(prev + 1, steps.length - 1))}
+        >
+          Show Next Step
+          <ChevronRight size={16} />
+        </button>
+      )}
+
+      {!showAll && currentStep === steps.length - 1 && (
+        <div className="solution-final-check">
+          <CheckCircle2 size={18} />
+          <span>{solution.finalCheck}</span>
+        </div>
+      )}
+
+      <div className="solution-actions">
+        <button
+          className="solution-show-all"
+          onClick={() => {
+            setShowAll(!showAll);
+            if (!showAll) setCurrentStep(steps.length - 1);
+          }}
+        >
+          {showAll ? 'Show Step-by-Step' : 'Show All Steps'}
+        </button>
+        {currentStep > 0 && !showAll && (
+          <button
+            className="solution-prev"
+            onClick={() => setCurrentStep(prev => Math.max(prev - 1, 0))}
+          >
+            <ChevronLeft size={16} />
+            Previous
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function MathPage({ onBack, onEarnXP }) {
   const [currentLevelId, setCurrentLevelId] = useState(mathLevels[0]?.id || 101);
   const [progress, setProgress] = useState(loadMathProgress);
   const [answers, setAnswers] = useState({});
   const [showResult, setShowResult] = useState(null);
   const [showHint, setShowHint] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
+  const [showStrategyGuide, setShowStrategyGuide] = useState(false);
   const [xpPop, setXpPop] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
   const [selectedExam, setSelectedExam] = useState(1);
+  const [attemptCount, setAttemptCount] = useState(0);
 
   const currentLevel = mathLevels.find(l => l.id === currentLevelId);
   const currentChapter = mathChapters.find(c => c.id === currentLevel?.chapterId);
@@ -43,6 +266,8 @@ export default function MathPage({ onBack, onEarnXP }) {
     setAnswers(saved || {});
     setShowResult(null);
     setShowHint(false);
+    setShowSolution(false);
+    setAttemptCount(0);
   }, [currentLevelId]);
 
   const handleAnswerChange = useCallback((variable, value) => {
@@ -57,6 +282,8 @@ export default function MathPage({ onBack, onEarnXP }) {
 
   const checkAnswers = () => {
     if (!currentLevel) return;
+
+    setAttemptCount(prev => prev + 1);
 
     const correct = currentLevel.variables.every(v => {
       const userVal = parseInt(answers[v], 10);
@@ -94,6 +321,8 @@ export default function MathPage({ onBack, onEarnXP }) {
     setAnswers({});
     setShowResult(null);
     setShowHint(false);
+    setShowSolution(false);
+    setAttemptCount(0);
     setProgress(prev => {
       const next = { ...prev, [currentLevelId]: { ...prev[currentLevelId], savedAnswers: null } };
       saveMathProgress(next);
@@ -133,6 +362,13 @@ export default function MathPage({ onBack, onEarnXP }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      {/* Strategy Guide Modal */}
+      <AnimatePresence>
+        {showStrategyGuide && (
+          <StrategyGuide onClose={() => setShowStrategyGuide(false)} />
+        )}
+      </AnimatePresence>
+
       {/* XP Pop Animation */}
       <AnimatePresence>
         {xpPop && (
@@ -174,15 +410,24 @@ export default function MathPage({ onBack, onEarnXP }) {
           <Calculator size={24} />
           <h1>TestAS Math Equations</h1>
         </div>
-        <div className="math-stats">
-          <span className="math-stat">
-            <Trophy size={16} />
-            {completedCount}/{mathLevels.length}
-          </span>
-          <span className="math-stat">
-            <Zap size={16} />
-            {totalXP} XP
-          </span>
+        <div className="math-header-actions">
+          <button
+            className="math-strategy-btn"
+            onClick={() => setShowStrategyGuide(true)}
+          >
+            <Brain size={16} />
+            <span>Mental Math Guide</span>
+          </button>
+          <div className="math-stats">
+            <span className="math-stat">
+              <Trophy size={16} />
+              {completedCount}/{mathLevels.length}
+            </span>
+            <span className="math-stat">
+              <Zap size={16} />
+              {totalXP} XP
+            </span>
+          </div>
         </div>
       </header>
 
@@ -258,9 +503,21 @@ export default function MathPage({ onBack, onEarnXP }) {
                 </span>
               </div>
 
+              {/* Important Notice */}
+              <div className="math-notice">
+                <Eye size={16} />
+                <span>No calculator or notes allowed! Solve in your head.</span>
+                <button
+                  className="notice-help"
+                  onClick={() => setShowStrategyGuide(true)}
+                >
+                  Learn how →
+                </button>
+              </div>
+
               {/* Equations */}
               <div className="math-equations">
-                <p className="math-eq-label">Solve for {currentLevel.variables.join(', ')}:</p>
+                <p className="math-eq-label">Solve for {currentLevel.variables.join(', ')} (each is 1-20):</p>
                 {currentLevel.equations.map((eq, i) => (
                   <div key={i} className="math-equation">
                     <span className="math-eq-num">{i + 1}.</span>
@@ -271,7 +528,7 @@ export default function MathPage({ onBack, onEarnXP }) {
 
               {/* Answer Inputs */}
               <div className="math-answers">
-                <p className="math-ans-label">Your answers (integers 1-20):</p>
+                <p className="math-ans-label">Your answers:</p>
                 <div className="math-inputs">
                   {currentLevel.variables.map(v => (
                     <div key={v} className="math-input-group">
@@ -282,8 +539,9 @@ export default function MathPage({ onBack, onEarnXP }) {
                         max="20"
                         value={answers[v] || ''}
                         onChange={(e) => handleAnswerChange(v, e.target.value)}
-                        className={showResult?.type === 'wrong' && answers[v] != currentLevel.answer[v] ? 'wrong' : ''}
+                        className={showResult?.type === 'wrong' && parseInt(answers[v]) !== currentLevel.answer[v] ? 'wrong' : ''}
                         disabled={isComplete}
+                        placeholder="?"
                       />
                     </div>
                   ))}
@@ -307,7 +565,10 @@ export default function MathPage({ onBack, onEarnXP }) {
                     ) : (
                       <>
                         <AlertCircle size={20} />
-                        <span>Not quite right. Try again!</span>
+                        <span>
+                          Not quite right.
+                          {attemptCount >= 2 && ' Try using the hint or solution!'}
+                        </span>
                       </>
                     )}
                   </motion.div>
@@ -319,10 +580,16 @@ export default function MathPage({ onBack, onEarnXP }) {
                 <button
                   className="math-hint-btn"
                   onClick={() => setShowHint(!showHint)}
-                  disabled={isComplete}
                 >
                   <Lightbulb size={16} />
-                  {showHint ? 'Hide Hint' : 'Show Hint'}
+                  {showHint ? 'Hide Hint' : 'Hint'}
+                </button>
+                <button
+                  className="math-solution-btn"
+                  onClick={() => setShowSolution(!showSolution)}
+                >
+                  <BookOpen size={16} />
+                  {showSolution ? 'Hide Solution' : 'Full Solution'}
                 </button>
                 <button className="math-reset-btn" onClick={handleReset}>
                   <RotateCcw size={16} />
@@ -357,6 +624,17 @@ export default function MathPage({ onBack, onEarnXP }) {
                     <Lightbulb size={16} />
                     <p>{currentLevel.hint}</p>
                   </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Solution Walkthrough */}
+              <AnimatePresence>
+                {showSolution && currentLevel.solution && (
+                  <SolutionWalkthrough
+                    solution={currentLevel.solution}
+                    equations={currentLevel.equations}
+                    onClose={() => setShowSolution(false)}
+                  />
                 )}
               </AnimatePresence>
 
