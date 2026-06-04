@@ -259,6 +259,7 @@ export default function MathPage({ onBack, onEarnXP }) {
   const completedCount = Object.values(progress).filter(p => p.completed).length;
 
   const examLevels = mathLevels.filter(l => l.exam === selectedExam);
+  const examNumbers = [...new Set(mathLevels.map(l => l.exam))].sort((a, b) => a - b);
 
   useEffect(() => {
     if (!currentLevel) return;
@@ -436,7 +437,7 @@ export default function MathPage({ onBack, onEarnXP }) {
         <aside className="math-sidebar glass-panel">
           {/* Exam Selector */}
           <div className="math-exam-tabs">
-            {[1, 2, 3].map(exam => (
+            {examNumbers.map(exam => (
               <button
                 key={exam}
                 className={`math-exam-tab ${selectedExam === exam ? 'active' : ''}`}

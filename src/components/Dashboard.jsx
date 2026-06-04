@@ -106,7 +106,7 @@ export default function Dashboard({
   // Calculate math stats
   const mathQuestionsCompleted = Object.values(mathProgress).filter(q => q.completed).length;
   const mathXP = Object.values(mathProgress).reduce((sum, q) => sum + (q.xp || 0), 0);
-  const totalMathQuestions = 60; // 3 exams × 20 questions
+  const totalMathQuestions = 160; // 8 exams × 20 questions
 
   // Combined XP (main game + beginner + math)
   const combinedXP = xp + beginnerXP + mathXP;
@@ -569,7 +569,7 @@ export default function Dashboard({
               <h3>Math Equations Practice</h3>
             </div>
             <p className="beginner-course-desc">
-              Practice {totalMathQuestions} TestAS-style equation systems. Easy, Medium, and Hard difficulty levels.
+              Practice {totalMathQuestions} TestAS-style equation systems across 8 exams. Medium and Hard difficulty, whole-number answers only.
             </p>
             <div className="beginner-course-stats">
               <span className="beginner-course-progress">

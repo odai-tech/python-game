@@ -170,7 +170,8 @@
 }
 
 .math-exam-tabs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   padding: 4px;
   background: rgba(0, 0, 0, 0.2);
@@ -178,7 +179,6 @@
 }
 
 .math-exam-tab {
-  flex: 1;
   padding: 8px 0;
   background: transparent;
   border: none;
